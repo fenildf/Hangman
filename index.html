@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hangman Game</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="words.js"></script>
+    <script src="hangman.js"></script>
+    <script src="tool.js"></script>
+    <script>
+        $(function () {
+            $('#StartBtn').on('click', function () {
+
+                if ($("#url").val() == "" || $("#playID").val() == "") {
+                    alert("游戏地址或游戏ID不能为空！");
+                    return;
+                }
+                var url = $("#url").val();
+                var email = $("#playID").val();
+
+                var RegUrl = new RegExp();
+                var RegEmail = new RegExp();
+                RegEmail.compile("^[A-Za-zd]+([-_.][A-Za-zd]+)*@([A-Za-zd]+[-.])+[A-Za-zd]{2,5}$");
+                RegUrl.compile("^[A-Za-z]+://[A-Za-z0-9-_]+\\.[A-Za-z0-9-_%&\?\/.=]+$");//验证URL
+
+                if (!RegUrl.test(url)) {
+                    alert("URL格式错误!");
+                    return;
+                }
+                if (!RegEmail.test(email)) {
+                    alert("邮箱格式错误!");
+                    return;
+                }
+
+                var oHangman = createHangman(url, email);
+                //var oHangman = createHangman('https://strikingly-hangman.herokuapp.com/game/on', 'tking.cs@gmail.com');
+
+                //开始游戏
+                oHangman.startGame();
+            })
+        })
+    </script>
+</head>
+<body>
+    <div id="main">
+        <header>
+            <div class="rNumber fl">
+                <ul>
+                    <li>
+                        <h4 class="fl">剩余单词数:</h4>
+                        <p class="fl number" id="remainingWord">80</p>
+                    </li>
+                    <li>
+                        <h4 class="fl">已猜单词数:</h4>
+                        <p class="fl number" id="totalWordCount">0</p>
+                    </li>
+                    <li>
+                        <h4 class="fl">猜对单词数:</h4>
+                        <p class="fl number" id="correctWordCount">0</p>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <h4 class="fl">猜错总次数:</h4>
+                        <p class="fl number" id="totalWrongGuessCount">0</p>
+                    </li>
+                    <li>
+                        <h4 class="fl">当前总分数:</h4>
+                        <p class="fl number" id="fraction">0</p>
+                    </li>
+                    <li>
+                        <h4 class="fl">当前正确率:</h4>
+                        <p class="fl number" id="correctRate">0</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="rNumber fl">
+                <ul>
+                    <li>
+                        <label>URL地址:</label>
+                        <input id="url" />
+                    </li>
+                    <li>
+                        <label class="number">游戏ID:</label>
+                        <input id="playID" />
+                    </li>
+                </ul>
+                <button id="SubmitBtn" class="Btn fr" hidden>提交分数</button>
+                <button id="StartBtn" class="Btn fr">开始游戏</button>
+            </div>
+        </header>
+        <footer>
+            <textarea id="list"></textarea>
+        </footer>
+    </div>
+</body>
+</html>
